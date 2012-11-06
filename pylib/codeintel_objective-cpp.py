@@ -33,7 +33,7 @@ except ImportError:
 #---- globals
 
 lang = "Objective-C++"
-log = logging.getLogger("codeintel.objective-cpp")
+log = logging.getLogger("codeintel.objective_cpp")
 #log.setLevel(logging.DEBUG)
 
 
@@ -70,7 +70,7 @@ keywords = [
 # scintilla lexer for Objective-C++ is UDL-based, then this is simply:
 #
 #   from codeintel2.udl import UDLLexer
-#   class Objective-CPPLexer(UDLLexer):
+#   class Objective_CPPLexer(UDLLexer):
 #       lang = lang
 #
 # Otherwise (the lexer for Objective-C++ is one of Komodo's existing C++ lexers
@@ -86,7 +86,7 @@ keywords = [
 #       lang = lang
 #       def __init__(self):
 #           self._properties = SilverCity.PropertySet()
-#           self._lexer = SilverCity.find_lexer_module_by_id(ScintillaConstants.SCLEX_OBJECTIVE-CPP)
+#           self._lexer = SilverCity.find_lexer_module_by_id(ScintillaConstants.SCLEX_OBJECTIVE_CPP)
 #           self._keyword_lists = [
 #               # Dev Notes: What goes here depends on the C++ lexer
 #               # implementation.
@@ -260,7 +260,7 @@ class Objective_CPPBuffer(CitadelBuffer):
 # multi-lang (i.e. can contain sections of different language content,
 # e.g. HTML can contain markup, JavaScript and CSS), then you will need
 # to also implement "scan_multilang()".
-class Objective_CPPCILEDriver(CileDriver):
+class Objective_CPPCILEDriver(UDLCILEDriver):
     lang = lang
 
     def scan_purelang(self, buf):
@@ -277,7 +277,7 @@ def register(mgr):
     mgr.set_lang_info(
         lang,
         silvercity_lexer=Objective_CPPLexer(),
-        buf_class=Objective-CPPBuffer,
+        buf_class=Objective_CPPBuffer,
         langintel_class=Objective_CPPLangIntel,
         import_handler_class=None,
         cile_driver_class=Objective_CPPCILEDriver,

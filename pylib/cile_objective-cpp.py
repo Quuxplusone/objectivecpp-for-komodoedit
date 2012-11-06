@@ -9,7 +9,7 @@ format:
     http://community.activestate.com/faq/codeintel-cix-schema
     
 Module Usage:
-    from cile_objective-cpp import scan
+    from cile_objective_cpp import scan
     mtime = os.stat("bar.objective_cpp")[stat.ST_MTIME]
     content = open("bar.objective_cpp", "r").read()
     scan(content, "bar.objective_cpp", mtime=mtime)
