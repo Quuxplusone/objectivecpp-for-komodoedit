@@ -38,9 +38,10 @@ keywords [
     'override', 'final',
     '@autoreleasepool', '@catch', '@class', '@compatibility_alias', '@defs', '@dynamic', '@encode', '@end', '@finally',
     '@implementation', '@interface', '@optional', '@package', '@private', '@property', '@protected', '@protocol',
-    '@public', '@required', '@selector', '@synchronized', '@synthesize', '@throw', '@try'
+    '@public', '@required', '@selector', '@synchronized', '@synthesize', '@throw', '@try',
     'bycopy', 'byref', 'in', 'inout', 'oneway', 'out',
-    'assign', 'atomic', 'copy', 'nonatomic', 'readonly', 'readwrite', 'retain'
+    'assign', 'atomic', 'copy', 'nonatomic', 'readonly', 'readwrite', 'retain', 'release', 'autorelease',
+    'self', 'super'
 ]
 
 # Set the basic patterns we'll be using for styling transitions.
@@ -62,23 +63,8 @@ state IN_SSL_DEFAULT:
 # C-style one line comments
 '//' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_TO_EOL
 
-# Hash-style one line comments
-#'#' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_TO_EOL
-
-# SQL-style one line comments
-#'--' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_TO_EOL
-
-# Lisp-style one line comments
-#';' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_TO_EOL
-
-# Erlang-style one line comments
-#'%' : paint(upto, SSL_DEFAULT),  => IN_SSL_COMMENT_TO_EOL
-
 # C-style block comments
 '/*' : paint(upto, SSL_DEFAULT), => IN_SSL_COMMENT_C_BLOCK
-
-# Pascal-style block comments
-#'(*' : paint(upto, SSL_DEFAULT), => IN_SSL_COMMENT_PASCAL_BLOCK
 
 # ----------- Entering Whitespace ---------- #
 
@@ -87,9 +73,8 @@ state IN_SSL_DEFAULT:
 
 # ----------- Entering Strings ---------- #
 
-'"' : paint(upto, SSL_DEFAULT), => IN_SSL_DSTRING
+/@?"/ : paint(upto, SSL_DEFAULT), => IN_SSL_DSTRING
 '\'' : paint(upto, SSL_DEFAULT), => IN_SSL_SSTRING
-'`' : paint(upto, SSL_DEFAULT), => IN_SSL_XSTRING
 
 # ----------- Entering Numbers ---------- #
 
@@ -116,9 +101,6 @@ state IN_SSL_COMMENT_TO_EOL:
 state IN_SSL_COMMENT_C_BLOCK: 
 '*/' : paint(include, SSL_COMMENTBLOCK), => IN_SSL_DEFAULT  # back to default state
 
-state IN_SSL_COMMENT_PASCAL_BLOCK: 
-'*)' : paint(include, SSL_COMMENTBLOCK), => IN_SSL_DEFAULT  # back to default state
-
 ################ In Strings - determines how we exit a string ################
 
 state IN_SSL_DSTRING:
@@ -127,10 +109,6 @@ state IN_SSL_DSTRING:
 
 state IN_SSL_SSTRING:
 '\'' : paint(include, SSL_STRING), => IN_SSL_DEFAULT  # back to default state
-/\\./ : #stay, anything escaped means it's still a string
-
-state IN_SSL_XSTRING:
-'`' : paint(include, SSL_STRING), => IN_SSL_DEFAULT  # back to default state
 /\\./ : #stay, anything escaped means it's still a string
 
 ################ End of State Handling ################
